@@ -1,0 +1,32 @@
+<Subscription xmlns="http://schemas.microsoft.com/2006/03/windows/events/subscription">
+<SubscriptionId>Domain Controller Events</SubscriptionId>
+<SubscriptionType>SourceInitiated</SubscriptionType>
+<Description>Important Domain Controller Events</Description>
+<Enabled>True</Enabled>
+<Uri>http://schemas.microsoft.com/wbem/wsman/1/windows/EventLog</Uri>
+<ConfigurationMode>MinLatency</ConfigurationMode>
+
+<Query>
+<![CDATA[<QueryList>
+	<Query Id="0" Path="Security">
+	
+	<!-- New Service Installed -->
+		<Select Path="System">*[System[(EventID='7045')]]</Select>
+	
+	<!-- Member Added or Removed from an AD Domain Local, Universal or  Global Security Group -->
+		<Select Path="Security">*[System[(EventID='4732') or (EventID='4733') or (EventID='4756') or (EventID='4757') or (EventID='4728') or (EventID='4729')]] and *[EventData[Data[@Name='TargetUserName'] and (Data='Administrators') or (Data='Domain Admins') or (Data='Schema Admins') or (Data='Enterprise Admins') or (Data='Domain Controllers') or (Data='Read-only Domain Controllers') or (Data='Enterprise Read-only Domain Controllers') or (Data='Account Operators') or (Data='Backup Operators') or (Data='Incoming Forest Trust Builders') or (Data='Print Operators') or (Data='Replicator') or (Data='Server Operators')]]</Select>
+	
+	<!-- Event Log Cleared -->
+		<Select Path="Security">*[System[(EventID='1102')]]</Select>
+	</Query>
+</QueryList>]]>
+</Query>
+
+    <ReadExistingEvents>True</ReadExistingEvents>
+    <TransportName>http</TransportName>
+    <ContentFormat>RenderedText</ContentFormat>
+    <Locale Language="en-AU"/>
+    <LogFile>ForwardedEvents</LogFile>
+    <AllowedSourceNonDomainComputers></AllowedSourceNonDomainComputers>
+    <AllowedSourceDomainComputers>O:NSG:NSD:(A;;GA;;;DD)</AllowedSourceDomainComputers>
+</Subscription>
